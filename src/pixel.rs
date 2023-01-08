@@ -1,8 +1,7 @@
 /* Imports */
-use bincode::config::{ Configuration, legacy };
+use bincode::config::legacy;
 use bincode::{ Encode, Decode };
 
-use std::fmt;
 use std::fs::{OpenOptions, File};
 use std::io::{self, Write, Read};
 
@@ -11,12 +10,7 @@ pub(crate) const PIXELS_HISTORY_PATH: &'static str = "./pixels.bin";
 
 /* Pixel struct. (x, y, col, de/encode config) */
 #[derive(Debug, Encode, Decode, Copy, Clone)]
-struct PixelInner(u16, u16, Color);
-#[derive(Copy, Clone)]
-pub struct PixelWrapper {
-    pixel: PixelInner,
-    config: Configuration
-}
+pub struct Pixel(u16, u16, Color);
 
 /* Color */
 #[derive(Debug, Encode, Decode, Copy, Clone)]
@@ -32,25 +26,20 @@ pub enum Color {
 }
 
 /* Method implementations */
-impl PixelWrapper {
+impl Pixel {
     /* Constructor */
     pub fn new(x:u16, y:u16, color:Color) -> Self {
-        /* Get bincode configuration */
-        let _opt = legacy().with_variable_int_encoding();
-        Self {
-            pixel: PixelInner::new(x, y, color),
-            config: _opt
-        }
+        Self(x, y, color)
     }
 
     /* Encode pixel to bytes */
     pub fn encode(&self) -> Option<Vec<u8>> {
-        bincode::encode_to_vec(&self.pixel, self.config).ok()
+        bincode::encode_to_vec(&self, legacy().with_variable_int_encoding()).ok()
     }
 
     /* Decode */
     pub fn decode(slice:&[u8]) -> Option<Self> {
-        match bincode::decode_from_slice::<PixelInner, _>(slice, legacy().with_variable_int_encoding()) {
+        match bincode::decode_from_slice::<Pixel, _>(slice, legacy().with_variable_int_encoding()) {
             Ok(e) => Some(
                 Self::new( e.0.0, e.0.1, e.0.2 )
             ),
@@ -60,10 +49,10 @@ impl PixelWrapper {
 
     /* Getters */
     pub fn coordinate(&self) -> (&u16, &u16) {
-        (&self.pixel.0, &self.pixel.1)
+        (&self.0, &self.1)
     }
     pub fn color(&self) -> &Color {
-        &self.pixel.2
+        &self.2
     }
 
     /* Append to history file */
@@ -92,12 +81,6 @@ impl PixelWrapper {
         pixels
     }
 }
-impl PixelInner {
-    /* Constructor */
-    pub fn new(x:u16, y:u16, color:Color) -> Self {
-        Self(x, y, color)
-    }
-}
 
 /* Conversions */
 impl From<u8> for Color {
@@ -119,17 +102,3 @@ impl Into<u8> for Color {
         self as u8
     }
 }
-
-/* Debug implementations */
-impl fmt::Debug for PixelWrapper {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Pixel")
-            .field("x", &self.pixel.0)
-            .field("y", &self.pixel.1)
-            .field("color", &self.pixel.2)
-            .finish()
-    }
-}
-
-/* Export */
-pub use PixelWrapper as Pixel;
