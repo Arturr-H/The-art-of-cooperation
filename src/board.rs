@@ -1,10 +1,8 @@
-use crate::pixel::Color;
-
 /* Imports */
-use crate::Pixel;
+use crate::pixel::{ Color, Pixel };
 
 /* Constants */
-const SIZE:usize = 1000_000;
+pub const SIZE:usize = 1000_000;
 
 /* Board */
 pub struct Board {
@@ -25,5 +23,9 @@ impl Board {
             Some(e) => *e = Pixel::new(x as u16, y as u16, color),
             None => ()
         }
+    }
+
+    pub fn get_pixels(&self) -> [Option<Pixel>; SIZE] {
+        self.pixels
     }
 }
