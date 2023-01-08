@@ -30,20 +30,32 @@ pub enum Color {
 /* Method implementations */
 impl PixelWrapper {
     /* Constructor */
-    pub fn new(x:u16, y:u16, color:Color) -> Self {
+    pub fn new(pixel:Pixel) -> Self {
         /* Get bincode configuration */
         let _opt = legacy().with_variable_int_encoding();
         Self {
-            pixel: Pixel::new(x, y, color),
+            pixel,
             config: _opt
+        }
+    }
+
+    /* Encode pixel to bytes */
+    pub fn encode(&self) -> Option<Vec<u8>> {
+        bincode::encode_to_vec(&self.pixel, self.config).ok()
+    }
+
+    /* Decode */
+    pub fn decode(slice:&[u8]) -> Option<Pixel> {
+        match bincode::decode_from_slice(slice, legacy().with_variable_int_encoding()) {
+            Ok(e) => e.0,
+            Err(_) => None
         }
     }
 }
 impl Pixel {
     /* Constructor */
-    pub fn new(x:u16, y:u16, color:Color) -> Self {
-        /* Get bincode configuration */
-        Self(x, y, color)
+    pub fn new(x:u16, y:u16, color:Color) -> PixelWrapper {
+        PixelWrapper::new(Self(x, y, color))
     }
 }
 
