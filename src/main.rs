@@ -3,6 +3,7 @@
 
 /* Imports */
 mod pixel;
+pub(crate) use pixel::*;
 use responder::prelude::*;
 
 use std::fs::File;
