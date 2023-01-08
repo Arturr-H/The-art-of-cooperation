@@ -3,6 +3,11 @@ use bincode::config::{ Configuration, legacy };
 use bincode::{ Encode, Decode };
 
 use std::fmt;
+use std::fs::OpenOptions;
+use std::io::{self, Write};
+
+/* Constants */
+pub(crate) const PIXELS_HISTORY_PATH: &'static str = "./pixels.bin";
 
 /* Pixel struct. (x, y, col, de/encode config) */
 #[derive(Debug, Encode, Decode)]
@@ -58,6 +63,21 @@ impl PixelWrapper {
     }
     pub fn color(&self) -> &Color {
         &self.pixel.2
+    }
+
+    /* Append to history file */
+    pub fn archive(&self) -> io::Result<()> {
+        let mut file = OpenOptions::new()
+            .append(true)
+            .open(PIXELS_HISTORY_PATH)?;
+        let encoded = match self.encode() {
+            Some(e) => e,
+            None => return Err(io::Error::new(io::ErrorKind::Other, "Failed to encode pixel."))
+        };
+
+        file.write(&encoded)?;
+        file.write(&[0])?;
+        Ok(())
     }
 }
 impl PixelInner {
