@@ -1,9 +1,9 @@
 /* Global allowances */
 #![allow(dead_code, unused_imports)]
 
-use bincode::config::{Config, Configuration};
 /* Imports */
-use bincode::{ config::legacy, Encode, Decode };
+use bincode::config::{ Config, Configuration, legacy };
+use bincode::{ Encode, Decode };
 use bincode::{ encode_into_slice };
 
 /* Pixel struct. (x, y, col, de/encode config) */
@@ -52,6 +52,14 @@ impl PixelWrapper {
             ),
             Err(_) => None
         }
+    }
+
+    /* Getters */
+    pub fn coordinate(&self) -> (&u16, &u16) {
+        (&self.pixel.0, &self.pixel.1)
+    }
+    pub fn color(&self) -> &Color {
+        &self.pixel.2
     }
 }
 impl PixelInner {
