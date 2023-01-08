@@ -9,7 +9,7 @@ use bincode::{ encode_into_slice };
 /* Pixel struct. (x, y, col, de/encode config) */
 #[derive(Debug, Encode, Decode)]
 pub struct PixelInner(u16, u16, Color);
-pub struct Pixel {
+pub struct PixelWrapper {
     pixel: PixelInner,
     config: Configuration
 }
@@ -28,7 +28,7 @@ pub enum Color {
 }
 
 /* Method implementations */
-impl Pixel {
+impl PixelWrapper {
     /* Constructor */
     pub fn new(pixel:PixelInner) -> Self {
         /* Get bincode configuration */
@@ -54,8 +54,8 @@ impl Pixel {
 }
 impl PixelInner {
     /* Constructor */
-    pub fn new(x:u16, y:u16, color:Color) -> Pixel {
-        Pixel::new(Self(x, y, color))
+    pub fn new(x:u16, y:u16, color:Color) -> PixelWrapper {
+        PixelWrapper::new(Self(x, y, color))
     }
 }
 
