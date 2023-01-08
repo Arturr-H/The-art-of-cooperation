@@ -1,0 +1,8 @@
+[package]
+name = "the_art_of_cooperation"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+responder = "0.1.991"
+bincode = { version = "2.0.0-rc", features = ["serde"] }
