@@ -12,7 +12,7 @@ mod pixel_tests {
     use the_art_of_cooperation::pixel::{ Color, Pixel };
 
     #[test]
-    pub fn decode() -> () {
+    pub fn encode_decode() -> () {
         let px = Pixel::new(32, 41, Color::LightPink);
         let decoded = Pixel::decode(&px.encode().unwrap()).unwrap();
 
