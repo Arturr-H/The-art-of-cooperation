@@ -1,3 +1,5 @@
+use crate::pixel::Color;
+
 /* Imports */
 use crate::Pixel;
 
@@ -18,7 +20,10 @@ impl Board {
     pub fn get(&self, x:usize, y:usize) -> Option<&Pixel> {
         self.pixels.get(SIZE*y + x).and_then(|i| i.as_ref())
     }
-    pub fn set(&mut self, x:usize, y:usize) -> Option<&mut Pixel> {
-        self.pixels.get_mut(SIZE*y + x).and_then(|i| i.as_mut())
+    pub fn set(&mut self, x:usize, y:usize, color:Color) -> () {
+        match self.pixels.get_mut(SIZE*y + x).and_then(|i| i.as_mut()) {
+            Some(e) => *e = Pixel::new(x as u16, y as u16, color),
+            None => ()
+        }
     }
 }
