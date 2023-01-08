@@ -1,12 +1,18 @@
 /* Global allowances */
 #![allow(dead_code, unused_imports)]
 
+use bincode::config::{Config, Configuration};
 /* Imports */
 use bincode::{ config::legacy, Encode, Decode };
+use bincode::{ encode_into_slice };
 
-/* Pixel struct. (x, y, col) */
+/* Pixel struct. (x, y, col, de/encode config) */
 #[derive(Debug, Encode, Decode)]
 pub struct Pixel(u16, u16, Color);
+pub struct PixelWrapper {
+    pixel: Pixel,
+    config: Configuration
+}
 
 /* Color */
 #[derive(Debug, Encode, Decode)]
@@ -22,9 +28,21 @@ pub enum Color {
 }
 
 /* Method implementations */
+impl PixelWrapper {
+    /* Constructor */
+    pub fn new(x:u16, y:u16, color:Color) -> Self {
+        /* Get bincode configuration */
+        let _opt = legacy().with_variable_int_encoding();
+        Self {
+            pixel: Pixel::new(x, y, color),
+            config: _opt
+        }
+    }
+}
 impl Pixel {
     /* Constructor */
     pub fn new(x:u16, y:u16, color:Color) -> Self {
+        /* Get bincode configuration */
         Self(x, y, color)
     }
 }
