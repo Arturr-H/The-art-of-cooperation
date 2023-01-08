@@ -2,7 +2,8 @@
 use crate::pixel::{ Color, Pixel };
 
 /* Constants */
-pub const SIZE:usize = 1000_000;
+pub const SIDE:usize = 100;
+pub const SIZE:usize = SIDE*SIDE;
 
 /* Board */
 pub struct Board {
@@ -16,13 +17,11 @@ impl Board {
         Board { pixels: [None; SIZE] }
     }
     pub fn get(&self, x:usize, y:usize) -> Option<&Pixel> {
-        self.pixels.get(SIZE*y + x).and_then(|i| i.as_ref())
+        self.pixels.get(SIDE*y + x).and_then(|i| i.as_ref())
     }
     pub fn set(&mut self, x:usize, y:usize, color:Color) -> () {
-        match self.pixels.get_mut(SIZE*y + x).and_then(|i| i.as_mut()) {
-            Some(e) => *e = Pixel::new(x as u16, y as u16, color),
-            None => ()
-        }
+        if x >= SIDE || y >= SIDE { return; }
+        self.pixels[SIDE*y + x] = Some(Pixel::new(x as u16, y as u16, color));
     }
 
     pub fn get_pixels(&self) -> [Option<Pixel>; SIZE] {
