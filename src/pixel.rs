@@ -23,7 +23,13 @@ pub enum Color {
 
 /* Method implementations */
 impl Pixel {
+    /* Constructor */
+    pub fn new(x:u16, y:u16, color:Color) -> Self {
+        Self(x, y, color)
+    }
 }
+
+/* Conversions */
 impl From<u8> for Color {
     fn from(value: u8) -> Self {
         match value {
