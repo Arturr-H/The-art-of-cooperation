@@ -8,7 +8,7 @@ use bincode::{ encode_into_slice };
 
 /* Pixel struct. (x, y, col, de/encode config) */
 #[derive(Debug, Encode, Decode)]
-pub struct PixelInner(u16, u16, Color);
+struct PixelInner(u16, u16, Color);
 pub struct PixelWrapper {
     pixel: PixelInner,
     config: Configuration
@@ -30,11 +30,11 @@ pub enum Color {
 /* Method implementations */
 impl PixelWrapper {
     /* Constructor */
-    pub fn new(pixel:PixelInner) -> Self {
+    pub fn new(x:u16, y:u16, color:Color) -> Self {
         /* Get bincode configuration */
         let _opt = legacy().with_variable_int_encoding();
         Self {
-            pixel,
+            pixel: PixelInner::new(x, y, color),
             config: _opt
         }
     }
@@ -45,17 +45,19 @@ impl PixelWrapper {
     }
 
     /* Decode */
-    pub fn decode(slice:&[u8]) -> Option<PixelInner> {
-        match bincode::decode_from_slice(slice, legacy().with_variable_int_encoding()) {
-            Ok(e) => e.0,
+    pub fn decode(slice:&[u8]) -> Option<Self> {
+        match bincode::decode_from_slice::<PixelInner, _>(slice, legacy().with_variable_int_encoding()) {
+            Ok(e) => Some(
+                Self::new( e.0.0, e.0.1, e.0.2 )
+            ),
             Err(_) => None
         }
     }
 }
 impl PixelInner {
     /* Constructor */
-    pub fn new(x:u16, y:u16, color:Color) -> PixelWrapper {
-        PixelWrapper::new(Self(x, y, color))
+    pub fn new(x:u16, y:u16, color:Color) -> Self {
+        Self(x, y, color)
     }
 }
 
@@ -79,3 +81,6 @@ impl Into<u8> for Color {
         self as u8
     }
 }
+
+/* Export */
+pub use PixelWrapper as Pixel;
