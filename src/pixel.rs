@@ -1,10 +1,8 @@
-/* Global allowances */
-#![allow(dead_code, unused_imports)]
-
 /* Imports */
-use bincode::config::{ Config, Configuration, legacy };
+use bincode::config::{ Configuration, legacy };
 use bincode::{ Encode, Decode };
-use bincode::{ encode_into_slice };
+
+use std::fmt;
 
 /* Pixel struct. (x, y, col, de/encode config) */
 #[derive(Debug, Encode, Decode)]
@@ -17,7 +15,7 @@ pub struct PixelWrapper {
 /* Color */
 #[derive(Debug, Encode, Decode)]
 #[repr(u8)]
-pub enum Color { 
+pub enum Color {
     DarkPurple, DarkRed, OrangeRed, Orange,
     Yellow, LightYellow, LightGreen, Green,
     DarkGreen, DarkTeal, Teal, Cyan, LightCyan,
@@ -87,6 +85,17 @@ impl From<u8> for Color {
 impl Into<u8> for Color {
     fn into(self) -> u8 {
         self as u8
+    }
+}
+
+/* Debug implementations */
+impl fmt::Debug for PixelWrapper {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Pixel")
+            .field("x", &self.pixel.0)
+            .field("y", &self.pixel.1)
+            .field("color", &self.pixel.2)
+            .finish()
     }
 }
 
