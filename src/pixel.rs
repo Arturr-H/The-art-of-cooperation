@@ -3,8 +3,8 @@ use bincode::config::{ Configuration, legacy };
 use bincode::{ Encode, Decode };
 
 use std::fmt;
-use std::fs::OpenOptions;
-use std::io::{self, Write};
+use std::fs::{OpenOptions, File};
+use std::io::{self, Write, Read};
 
 /* Constants */
 pub(crate) const PIXELS_HISTORY_PATH: &'static str = "./pixels.bin";
@@ -78,6 +78,17 @@ impl PixelWrapper {
         file.write(&encoded)?;
         file.write(&[0])?;
         Ok(())
+    }
+
+    /* Get pixels from history file */
+    pub fn get_history() -> Vec<Pixel> {
+        let pixels = File::open("./pixels.bin").unwrap();
+        let pixels = pixels.bytes().map(|e| e.unwrap()).collect::<Vec<u8>>();
+        let mut pixels = pixels.split(|e| *e == 0).collect::<Vec<&[u8]>>();
+        pixels.pop();
+    
+        let pixels = pixels.iter().map(|e| Pixel::decode(e).unwrap()).collect::<Vec<Pixel>>();
+        pixels
     }
 }
 impl PixelInner {
