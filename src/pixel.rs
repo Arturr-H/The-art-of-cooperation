@@ -10,15 +10,16 @@ use std::io::{self, Write, Read};
 pub(crate) const PIXELS_HISTORY_PATH: &'static str = "./pixels.bin";
 
 /* Pixel struct. (x, y, col, de/encode config) */
-#[derive(Debug, Encode, Decode)]
+#[derive(Debug, Encode, Decode, Copy, Clone)]
 struct PixelInner(u16, u16, Color);
+#[derive(Copy, Clone)]
 pub struct PixelWrapper {
     pixel: PixelInner,
     config: Configuration
 }
 
 /* Color */
-#[derive(Debug, Encode, Decode)]
+#[derive(Debug, Encode, Decode, Copy, Clone)]
 #[repr(u8)]
 pub enum Color {
     DarkPurple, DarkRed, OrangeRed, Orange,
