@@ -3,16 +3,19 @@
 
 /* Imports */
 mod pixel;
-pub(crate) use pixel::*;
+mod board;
+
+use pixel::*;
+use board::*;
+
 use responder::prelude::*;
 
-use std::fs::File;
+use std::{fs::File, io::Read};
 use std::path::Path;
 
 use bincode::{ config::legacy, Encode, Decode };
 
 /* Constants */
-const PIXELS_HISTORY_PATH: &'static str = "./pixels";
 const COLORS: &[&'static str] = &[
     "#40002b", "#990033", "#ff4500", "#ff9000", "#ffd635", "#fff8b8", "#aff257", "#00b368",
     "#008064", "#004852", "#007780", "#00ccc0", "#91fff8", "#358de6", "#2446a4", "#312680",
@@ -22,8 +25,5 @@ const COLORS: &[&'static str] = &[
 
 /* Initialize */
 fn main() -> () {
-    /* Get bincode configuration */
-    let _opt = legacy().with_variable_int_encoding();
-
-
+    dbg!(Pixel::get_history());
 }
