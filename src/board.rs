@@ -6,7 +6,7 @@ use std::{fs::{OpenOptions, File}, io::{self, Write, Read}};
 /* Constants */
 pub const SIDE:usize = 100;
 pub const SIZE:usize = SIDE*SIDE;
-const PATH_TO_SAVE:&'static str = "./board.bin";
+pub const PATH_TO_SAVE:&'static str = "./board.bin";
 
 /* Board */
 #[derive(Encode, Decode, Debug)]
