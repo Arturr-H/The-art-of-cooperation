@@ -6,7 +6,7 @@ use std::fs::{OpenOptions, File};
 use std::io::{self, Write, Read};
 
 /* Constants */
-pub(crate) const PIXELS_HISTORY_PATH: &'static str = "./pixels.bin";
+pub const PIXELS_HISTORY_PATH: &'static str = "./pixels.bin";
 
 /* Pixel struct. (x, y, col, de/encode config) */
 #[derive(Debug, Encode, Decode, Copy, Clone)]

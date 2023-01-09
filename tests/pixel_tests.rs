@@ -9,7 +9,8 @@
 #[cfg(test)]
 mod pixel_tests {
     /* Imports */
-    use the_art_of_cooperation::pixel::{ Color, Pixel };
+    use std::path::Path;
+    use the_art_of_cooperation::pixel::{ Color, Pixel, PIXELS_HISTORY_PATH };
 
     #[test]
     pub fn encode_decode() -> () {
@@ -41,5 +42,10 @@ mod pixel_tests {
     pub fn get_color() -> () {
         let px = Pixel::new(32, 41, Color::LightPink);
         assert_eq!(matches!(px.color(), Color::LightPink), true);
+    }
+
+    #[test]
+    pub fn history_file_availability() -> () {
+        assert_eq!(Path::new(PIXELS_HISTORY_PATH).is_file(), true, "Path to pixel history file does not exist!")
     }
 }
