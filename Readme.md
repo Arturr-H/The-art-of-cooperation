@@ -11,4 +11,8 @@ Every redditor got to place one pixel each every 5 minutes, and could chose its 
 
 ## Why?
 
-I'd like to improve my websocket skills and would like to practice writing backend.
+I'd like to improve my websocket skills and would like to practice writing backend. I'd also like to learn new technologies (frontend, and databses).
+
+## How?
+
+I'm using rust as my backend languge - my crate `responder` to handle http-requests and my previous repo `projects-accounts` for account managing. I've not decided database and frontend libraries yet, however I'd like to try something which is out of my comfort zone to learn something new. I've touched on redis before, and might use it for this project. I've also heard a lot of positive reviews about `Svelte` and `Svelte kit`, so I might take a look at them. `HTMX` looks promising, howvever I don't like the way rendering is occured server-side
