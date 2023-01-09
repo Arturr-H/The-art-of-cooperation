@@ -1,8 +1,8 @@
 #[cfg(test)]
 mod board_tests {
     /* Imports */
-    use the_art_of_cooperation::{ board::{ Board, SIZE }, pixel::Color };
-    use std::thread;
+    use the_art_of_cooperation::{ board::{ Board, SIZE, PATH_TO_SAVE }, pixel::Color };
+    use std::{ thread, path::Path };
 
     /* Constants */
     const STACK_SIZE:usize = 10 * 1024 * 1024;
@@ -63,5 +63,10 @@ mod board_tests {
             .unwrap();
 
         thr.join().unwrap();
+    }
+
+    #[test]
+    pub fn save_file_availability() -> () {
+        assert_eq!(Path::new(PATH_TO_SAVE).is_file(), true, "Path to board save file does not exist!")
     }
 }
