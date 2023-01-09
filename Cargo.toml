@@ -8,3 +8,10 @@ responder = "0.1.991"
 bincode = { version = "2.0.0-rc", features = ["serde"] }
 dotenv = "0.15.0"
 lazy_static = "1.4.0"
+
+## Handling requests to account manager
+reqwest = { version = "0.11.4", features = ["json", "blocking"] }
+
+## For serializing / deserializing JSON data from account manager
+serde = { version = "1.0.152", default-features = false }
+serde_derive = "1.0.152"
