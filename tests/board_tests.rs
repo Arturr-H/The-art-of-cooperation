@@ -2,6 +2,10 @@
 mod board_tests {
     /* Imports */
     use the_art_of_cooperation::{ board::{ Board, SIZE }, pixel::Color };
+    use std::thread;
+
+    /* Constants */
+    const STACK_SIZE:usize = 10 * 1024 * 1024;
 
     #[test]
     pub fn initialization() -> () {
@@ -28,5 +32,36 @@ mod board_tests {
 
         /* Get empty tile */
         assert_eq!(board.get(20, 10).is_none(), true)
+    }
+
+    #[test]
+    pub fn save_and_retrieve() -> () {
+        /* We need to build a thread with bigger stack size than usual */
+        let thr = thread::Builder::new()
+            .stack_size(STACK_SIZE)
+            .spawn(|| {
+                let mut board = Board::new();
+                let length = board.get_pixels().len().clone();
+
+                /* Set some random pixels */
+                board.set(32, 12, Color::DarkTeal);
+                board.set(12, 14, Color::Black);
+                
+                /* Encode to bytes */
+                let bytes = board.encode().unwrap();
+                drop(board);
+                
+                /* Decode */
+                let retrieved = Board::decode(&bytes).unwrap();
+                
+                /* Check */
+                assert_eq!(retrieved.get_pixels().len() == length, true);
+                assert_eq!(matches!(retrieved.get(32, 12).unwrap().color(), Color::DarkTeal), true);
+                assert_eq!(matches!(retrieved.get(12, 14).unwrap().color(), Color::Black), true);
+                assert_eq!(retrieved.get(1, 12).is_none(), true);
+            })
+            .unwrap();
+
+        thr.join().unwrap();
     }
 }
