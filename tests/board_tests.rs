@@ -20,10 +20,10 @@ mod board_tests {
         let mut board = Board::new();
 
         /* Set tile */
-        board.set(41, 84, Color::LightBrown);
+        board.set(41, 12, Color::LightBrown);
 
         /* Get tile */
-        assert_eq!(matches!(board.get(41, 84).unwrap().color(), Color::LightBrown), true)
+        assert_eq!(matches!(board.get(41, 12).unwrap().color(), Color::LightBrown), true)
     }
 
     #[test]
