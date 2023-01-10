@@ -102,3 +102,8 @@ impl Into<u8> for Color {
         self as u8
     }
 }
+impl Into<u8> for Pixel {
+    fn into(self) -> u8 {
+        self.2 as u8
+    }
+}
