@@ -4,7 +4,7 @@ use bincode::{ Encode, Decode, config::legacy };
 use std::{fs::{OpenOptions, File}, io::{self, Write, Read}};
 
 /* Constants */
-pub const SIDE:usize = 100;
+pub const SIDE:usize = 50;
 pub const SIZE:usize = SIDE*SIDE;
 pub const PATH_TO_SAVE:&'static str = "./board.bin";
 
