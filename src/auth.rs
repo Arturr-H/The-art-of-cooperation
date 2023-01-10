@@ -13,8 +13,13 @@ pub fn origin_control(stream: &mut Stream) -> bool {
                 .get(ACCOUNT_MANAGER_URL.to_owned() + "profile/verify-token")
                 .header("token", *token)
                 .send() {
-                    Ok(req) => if req.status() == 200 { true }
-                               else { false }
+                    Ok(req) => {
+                        if req.status() == 200 { true }
+                        else {
+                            stream.respond_status(401);
+                            false
+                        }
+                    }
                     Err(_) => {
                         stream.respond_status(503);
                         false
