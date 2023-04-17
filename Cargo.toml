@@ -14,4 +14,4 @@ reqwest = { version = "0.11.4", features = ["json", "blocking"] }
 
 ## For serializing / deserializing JSON data from account manager
 serde = { version = "1.0.152", default-features = false }
-serde_derive = "1.0.152"
+serde_derive = "1.0.160"
